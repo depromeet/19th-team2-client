@@ -67,6 +67,8 @@ src/
 ## 협업 규칙
 
 - **브랜치**: `main` 하나 + 기능 브랜치. `feat/설명`, `fix/설명` (이슈 도구가 정해지면 이슈 번호 추가)
+  - 소문자 kebab-case. 이슈 번호는 `feat/12-group-buy-detail`처럼 접두어 뒤에 붙입니다.
+  - `pre-push` 훅과 CI(`branch-name` job)가 이름을 검사하고, 훅은 `main`으로의 직접 push를 막습니다.
 - **병합**: PR로만, squash merge, 승인 1명 이상
 - **커밋**: `feat:` `fix:` `chore:` `docs:` `refactor:` 접두어 — `git commit`(에디터)을 실행하면 `.gitmessage` 템플릿이 열립니다 (`pnpm install` 때 자동 설정)
 - **PR**: 템플릿(무엇을 / 왜 / 확인 방법 / 스크린샷) 작성
