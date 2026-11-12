@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # 기본 GITHUB_TOKEN 인증 헤더가 남으면 MIRROR_TOKEN 대신 쓰여 403이 난다
+          persist-credentials: false
       - name: 미러 레포로 push
         env:
           MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
