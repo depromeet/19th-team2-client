@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/*
+ * 디자인 토큰
+ * - Figma 디자인 시스템 토큰이 확정되면 아래 값을 교체한다.
+ * - @theme에 정의한 값은 유틸리티로 바로 쓸 수 있다.
+ *   예) --color-primary → bg-primary / text-primary, --radius-card → rounded-card
+ * - 임의값(bg-[#123456])보다 토큰을 우선 사용한다.
+ */
+@theme {
+  /* color */
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-border: #e4e4e7;
+  --color-danger: #dc2626;
+
+  /* radius */
+  --radius-card: 1rem;
+
+  /* breakpoint: 모바일 우선. 서비스 최대 폭 */
+  --container-app: 30rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+}

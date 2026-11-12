@@ -1,0 +1,29 @@
+# Vercel Hobby는 org 소유 private 레포를 배포할 수 없어 개인 계정 미러 레포에 연결한다.
+# 모든 브랜치를 미러링해 브랜치별 Preview URL을 디자인 QA에 쓴다.
+name: Mirror
+
+on:
+  push:
+    branches: ["**"]
+
+concurrency:
+  group: mirror-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mirror:
+    if: github.repository == 'depromeet/19th-team2-client'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # 기본 GITHUB_TOKEN 인증 헤더가 남으면 MIRROR_TOKEN 대신 쓰여 403이 난다
+          persist-credentials: false
+      - name: 미러 레포로 push
+        env:
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          git push --force \
+            "https://mirror:${MIRROR_TOKEN}@github.com/seongyun4359/19th-team2-client.git" \
+            "HEAD:refs/heads/${GITHUB_REF_NAME}"
