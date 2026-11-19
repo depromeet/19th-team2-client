@@ -1,0 +1,13 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    // 공용 패키지(@team2/ui)의 *.native.tsx를 타입 검사 대상으로 고른다 (Metro와 같은 규칙)
+    "moduleSuffixes": [".ios", ".android", ".native", ""],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/assets/*": ["./assets/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+}

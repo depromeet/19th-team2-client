@@ -8,9 +8,24 @@ description: Use when creating a new React component, page section, or feature m
 
 ## 위치 결정
 
-- 도메인 무관 재사용 UI → `src/components/ui/<Name>.tsx`
-- 특정 도메인 전용 → `src/features/<domain>/components/<Name>.tsx`
-- 라우트 파일(`src/app/**/page.tsx`)에는 조합만 두고 로직은 feature로.
+- 웹·앱이 함께 쓰는 UI → `packages/ui/src/<Name>/` (아래 "공용 컴포넌트" 참고)
+- 웹 전용, 도메인 무관 → `apps/web/src/components/ui/<Name>.tsx`
+- 웹 전용, 특정 도메인 → `apps/web/src/features/<domain>/components/<Name>.tsx`
+- 앱 전용 → `apps/mobile/src/components/` 또는 `apps/mobile/src/features/<domain>/components/`
+- 라우트 파일(`page.tsx`, `apps/mobile/src/app/**`)에는 조합만 두고 로직은 feature로.
+
+## 공용 컴포넌트 (`packages/ui`)
+
+```
+packages/ui/src/<Name>/
+  types.ts          # 공통 props: type <Name>Props
+  <Name>.tsx        # 웹: 시맨틱 태그 + Tailwind, 필요하면 "use client", className prop 추가 가능
+  <Name>.native.tsx # 앱: RN 컴포넌트 + StyleSheet, 색·반경은 @team2/shared tokens
+  <Name>.test.tsx   # 웹 구현 테스트
+```
+
+- 이벤트 prop 이름은 두 구현 모두 `onPress`로 통일한다.
+- `packages/ui/src/index.ts`에 `export { <Name> } from "./<Name>/<Name>";` 추가 (확장자 없이 → 번들러가 플랫폼 파일을 고름).
 
 ## 작성 규칙
 

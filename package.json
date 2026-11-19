@@ -1,45 +1,23 @@
 {
   "name": "19th-team2-client",
-  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "pnpm --filter web dev",
+    "dev:mobile": "pnpm --filter mobile start",
+    "build": "pnpm --filter web build",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "typecheck": "next typegen && tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
     "check": "pnpm typecheck && pnpm lint && pnpm test",
     "prepare": "husky && git config commit.template .gitmessage"
   },
-  "dependencies": {
-    "@tanstack/react-query": "^5.107.1",
-    "clsx": "^2.1.1",
-    "next": "16.4.6",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "tailwind-merge": "^3.7.0"
-  },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
-    "@tailwindcss/turbopack": "4.3.3",
-    "@tanstack/react-query-devtools": "^5.107.1",
-    "@testing-library/dom": "^10.4.2",
-    "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/react": "^16.3.3",
-    "@types/node": "^22.20.5",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^6.3.0",
     "husky": "^9.1.7",
-    "jsdom": "^31.0.0",
     "lint-staged": "^17.6.0",
-    "tailwindcss": "4.3.3",
-    "typescript": "^5",
-    "vitest": "^5.1.0"
+    "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.34.9",
   "engines": {
