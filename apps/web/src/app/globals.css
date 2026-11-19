@@ -1,7 +1,10 @@
 @import "tailwindcss";
+/* 공용 UI 패키지의 클래스도 생성 대상에 포함 */
+@source "../../../../packages/ui/src";
 
 /*
  * 디자인 토큰
+ * - 값의 원본은 packages/shared/src/tokens.ts (앱과 공유). 바꿀 땐 두 곳을 함께 바꾼다.
  * - Figma 디자인 시스템 토큰이 확정되면 아래 값을 교체한다.
  * - @theme에 정의한 값은 유틸리티로 바로 쓸 수 있다.
  *   예) --color-primary → bg-primary / text-primary, --radius-card → rounded-card

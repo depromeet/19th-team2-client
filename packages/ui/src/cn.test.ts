@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+import { cn } from "./cn";
 
 describe("cn", () => {
   it("falsy 값을 제외하고 합친다", () => {

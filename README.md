@@ -14,6 +14,8 @@
 | 린트·포맷       | Biome                                | 도구·설정이 하나. Tailwind 클래스 정렬도 Biome 규칙으로 처리           |
 | 테스트          | Vitest + Testing Library             |                                                                        |
 | 배포            | Vercel                               | PR마다 Preview URL → 디자인 QA                                         |
+| 앱              | Expo SDK 58 + Expo Router            | 웹과 로직·토큰·컴포넌트 props 공유, 렌더링만 네이티브로                |
+| 레포            | pnpm workspace 모노레포              | `apps/web`, `apps/mobile`, `packages/shared`, `packages/ui`            |
 
 ## 시작하기
 
@@ -21,19 +23,39 @@
 corepack enable          # pnpm 버전은 package.json의 packageManager로 고정
 pnpm install             # pre-commit 훅(husky)도 함께 설치됨
 cp .env.example .env.local
-pnpm dev
+pnpm dev                 # 웹 (http://localhost:3000)
+pnpm dev:mobile          # 앱 (Expo Go 앱으로 QR 스캔, 또는 i / a 키로 시뮬레이터)
 ```
 
 VS Code는 추천 확장(Biome, Tailwind CSS IntelliSense)을 설치하면 저장 시 자동 포맷됩니다.
 
-| 명령            | 설명                                                    |
-| --------------- | ------------------------------------------------------- |
-| `pnpm dev`      | 개발 서버                                               |
-| `pnpm check`    | typecheck + Biome 검사 + 테스트 (PR 전 필수, CI와 동일) |
-| `pnpm lint:fix` | 포맷·import 정렬·Tailwind 클래스 정렬 자동 수정         |
-| `pnpm build`    | 프로덕션 빌드                                           |
+| 명령              | 설명                                                    |
+| ----------------- | ------------------------------------------------------- |
+| `pnpm dev`        | 웹 개발 서버                                            |
+| `pnpm dev:mobile` | 앱 개발 서버 (Expo)                                     |
+| `pnpm check`      | typecheck + Biome 검사 + 테스트 (PR 전 필수, CI와 동일) |
+| `pnpm lint:fix`   | 포맷·import 정렬·Tailwind 클래스 정렬 자동 수정         |
+| `pnpm build`      | 웹 프로덕션 빌드                                        |
 
 ## 폴더 구조
+
+```
+apps/
+  web/                  # Next.js (Vercel 배포, Root Directory = apps/web)
+  mobile/               # Expo 앱
+packages/
+  shared/               # @team2/shared — 타입, API·queryOptions, 유틸, 디자인 토큰 (UI 없음)
+  ui/                   # @team2/ui — 공용 컴포넌트
+    src/Button/
+      types.ts          # 웹·앱 공통 props
+      Button.tsx        # 웹 (button + Tailwind)  ← Next가 선택
+      Button.native.tsx # 앱 (Pressable)          ← Metro가 선택
+```
+
+- 디자인 토큰 원본은 `packages/shared/src/tokens.ts`. 웹 `globals.css`의 `@theme`도 같은 값이어야 하고, 어긋나면 웹 테스트가 실패합니다.
+- 웹에는 react-native-web을 쓰지 않습니다. 진입 페이지 첫 로딩과 Server Component를 지키기 위해서입니다.
+
+### apps/web
 
 ```
 src/
