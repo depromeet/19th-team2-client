@@ -56,6 +56,9 @@ pnpm workspace 모노레포.
   `https://docs.expo.dev/llms.txt`를 확인한다.
 - 네이티브 의존성은 `pnpm add` 대신 `apps/mobile`에서 `pnpm exec expo install <pkg>` (SDK 호환 버전 자동 선택).
 - `ios/`, `android/`는 생성물(CNG)이라 커밋·직접 수정 금지. 네이티브 설정은 `app.json`과 config plugin으로.
+- 여러 패키지가 함께 쓰는 버전(react, react-native, typescript, @types/react 등)은 `pnpm-workspace.yaml`의
+  `catalog:`에서만 고친다. SDK를 올릴 때 `expo install --check`가 알려주는 버전을 catalog에 반영한다.
+- 빌드 설정은 `apps/mobile/eas.json` (development = dev client 빌드, preview = 내부 배포, production = 스토어).
 
 ### 공유 패키지 규칙
 

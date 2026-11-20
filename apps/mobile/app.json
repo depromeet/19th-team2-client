@@ -8,9 +8,11 @@
     "scheme": "team2",
     "userInterfaceStyle": "light",
     "ios": {
+      "bundleIdentifier": "com.depromeet.team2",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.depromeet.team2",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
