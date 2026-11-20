@@ -5,3 +5,14 @@ packages:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+
+# 여러 패키지가 함께 쓰는 버전은 여기서만 고친다. package.json에는 "catalog:"로 적는다.
+# react / react-native 버전은 Expo SDK가 정한다 (`pnpm exec expo install --check`로 확인 후 여기 반영).
+catalog:
+  "@types/react": ~19.3.0
+  "@types/react-dom": ~19.3.0
+  react: 19.3.0
+  react-dom: 19.3.0
+  react-native: 0.88.1
+  typescript: ~6.0.3
+  vitest: ^5.1.0

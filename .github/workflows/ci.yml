@@ -35,3 +35,20 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
+
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # SDK 58과 맞지 않는 의존성 버전, 설정 오류를 잡는다
+      - name: Expo Doctor
+        run: pnpm --filter mobile expo:doctor
+      # 실제 iOS·Android JS 번들이 만들어지는지 확인한다 (Metro 해석·babel 오류 검출)
+      - name: Expo export
+        run: pnpm --filter mobile export
