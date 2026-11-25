@@ -1,0 +1,6 @@
+.env*
+.vercel
+shortcut/build
+README.md
+feed-credits.md
+.omc
