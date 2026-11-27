@@ -605,7 +605,9 @@ const paintToday=({m,amt,art,cap,bar,note,label})=>{
  $('#tw-amt').textContent=fmt(amt)+'원';$('#tw-min').textContent=label||minLabel(m);$('#tw-fill').style.width=bar+'%';
  $$('.tw-art').forEach(x=>x.hidden=x.dataset.art!==art);const c=$('#tw-cap');c.textContent=cap;c.hidden=!cap;
  $('#tw-note').innerHTML=note+NOTE_TAIL;};
-const renderToday=()=>{const m=S.minutes||0,amt=Math.round(m*S.hourly/60/10)*10;
+/* UT 시나리오대로 단축어 Task는 '오늘 0분' 화면에서 끝낸다. 불러온 사용 시간은 화면에 쓰지 않는다(11/27 디자인 파트 결정) */
+const TODAY_ZERO=true;
+const renderToday=()=>{const m=TODAY_ZERO?0:(S.minutes||0),amt=Math.round(m*S.hourly/60/10)*10;
  const art=amt>=MOVIE?'camera':amt>=COFFEE?'coffee':'coin';
  paintToday({m,amt,art,cap:art==='camera'?'영화 표 한 장이 증발했어요':art==='coffee'?'커피 한 잔 값이 증발했어요':'',
   bar:m>0?Math.max(2,Math.min(100,m/1440*100)):0,
