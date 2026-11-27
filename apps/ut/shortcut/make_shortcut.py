@@ -1,8 +1,8 @@
 """UT용 단축어(chi2kawa-ut)를 코드로 만든다.
 
 단축어 하나로 두 가지 일을 한다(참가자가 여러 개 설치하지 않게).
-  입력이 없으면(알림 Task, 페이지가 입력 없이 실행):
-      2분 뒤 시각으로 미리 알림("방금 커피 한 잔이 증발했어요")을 등록하고 인스타그램을 연다.
+  입력이 없으면(단축어 앱에서 그냥 눌렀을 때):
+      "UT 페이지에서 실행해 주세요" 안내만 띄운다(11/27 이후 알림 Task는 페이지 안 가짜 피드로 진행).
   입력이 있으면(불러오기, 페이지가 참가자 코드를 입력으로 넘김):
       1) 앱 및 웹사이트 활동 가져오기(기간: 오늘)
       2) <페이지 주소>?pid=<단축어 입력>#d=<값> 을 사파리로 연다.
@@ -29,8 +29,6 @@ USAGE_ACTION = (
 )
 OBJ = "￼"
 SHORTCUT_INPUT = {"Type": "ExtensionInput"}
-ALERT_TITLE = "방금 커피 한 잔이 증발했어요"
-ALERT_NOTE = "인스타그램을 보는 사이 커피 한 잔 값이 증발했어요. 브라우저로 돌아가 확인해 보세요."
 
 
 def output_of(action_uuid, name):
@@ -55,24 +53,14 @@ NOTHING = {"WFWorkflowActionIdentifier": "is.workflow.actions.nothing", "WFWorkf
 
 
 def alert_actions():
-    """미리 알림을 먼저 만들고 인스타그램을 연다. 처음 실행할 때 뜨는 미리 알림 접근 허용 창이
-    인스타그램 뒤에 숨지 않게 하려는 것이다. 인스타그램이 없으면 페이지가 곧바로 돌아온 것을 보고 피드로 잇는다."""
-    date_id = str(uuid.uuid4()).upper()
+    """입력 없이 실행됐을 때(단축어 앱에서 그냥 눌렀을 때) 안내만 띄운다.
+    11/27 디자인 파트 결정으로 알림 Task는 페이지 안 가짜 피드로 진행해서 미리 알림·인스타그램 열기는 쓰지 않는다."""
     return [
-        {"WFWorkflowActionIdentifier": "is.workflow.actions.adjustdate",
+        {"WFWorkflowActionIdentifier": "is.workflow.actions.alert",
          "WFWorkflowActionParameters": {
-             "UUID": date_id,
-             "WFDate": token_string([{"Type": "CurrentDate"}]),
-             "WFAdjustOperation": "Add",
-             "WFDuration": {"Value": {"Unit": "min", "Magnitude": "2"}, "WFSerializationType": "WFQuantityFieldValue"}}},
-        {"WFWorkflowActionIdentifier": "is.workflow.actions.addnewreminder",
-         "WFWorkflowActionParameters": {
-             "WFCalendarItemTitle": ALERT_TITLE,
-             "WFCalendarItemNotes": ALERT_NOTE,
-             "WFAlertEnabled": "Alert",
-             "WFAlertCustomTime": token_string([output_of(date_id, "조정된 날짜")])}},
-        {"WFWorkflowActionIdentifier": "is.workflow.actions.openurl",
-         "WFWorkflowActionParameters": {"WFInput": token_string(["instagram://app"])}},
+             "WFAlertActionTitle": token_string(["UT 페이지에서 실행해 주세요"]),
+             "WFAlertActionMessage": token_string(["이 단축어는 UT 페이지의 [불러오기] 버튼으로 실행돼요."]),
+             "WFAlertActionCancelButtonShown": False}},
         NOTHING,
     ]
 
