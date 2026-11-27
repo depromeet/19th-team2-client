@@ -732,9 +732,12 @@ const buildFeed=()=>{if(feedBuilt)return;feedBuilt=true;
    if(!reduceMotion())h.animate([{opacity:0,transform:'scale(.4)'},{opacity:.95,transform:'scale(1.1)',offset:.35},{opacity:.95,transform:'scale(1)',offset:.7},{opacity:0,transform:'scale(1.1)'}],{duration:800,easing:'ease-out'});lastTap=0;}
   else lastTap=now;});};
 const bannerEl=$('#fd-banner');
+/* 알림을 무시하면(저절로 사라지거나 밀어 올림) 계속 본 것으로 보고 다음 단계로 넘긴다.
+   커피 단계면 영화표 단계로 넘겨 30초 뒤에 띄우고, 영화표 단계면 30초 뒤 영화표를 다시 띄운다 */
+const ignoredDelay=()=>{if(alStage===1){setAlertStage(2);return S.fast?FAST_MOVIE_MS:MOVIE_DELAY_MS;}return 30000;};
 const hideBanner=reason=>{if(!bannerEl.classList.contains('on'))return;bannerEl.classList.remove('on');clearTimeout(bannerHideT);
  /* 실제 아이폰처럼 안 누르면 사라지지만, UT가 막히지 않게 30초마다 다시 띄운다 */
- if(reason==='timeout'){track('feed_banner_timeout',{nth:bannerN});clearTimeout(bannerT);bannerT=setTimeout(showBanner,30000);}};
+ if(reason==='timeout'){track('feed_banner_timeout',{nth:bannerN});clearTimeout(bannerT);bannerT=setTimeout(showBanner,ignoredDelay());}};
 const showBanner=()=>{if(cur!=='feed')return;bannerN++;bannerShownAt=visNow();bannerEl.classList.add('on');
  track('feed_banner_show',{nth:bannerN,likes:feedLikes,swipes:feedSwipes,reads:feedReads,scroll_px:Math.round(feedMaxScroll),feed_ms:Math.round(visNow()-feedOpenedAt)});
  bannerHideT=setTimeout(()=>hideBanner('timeout'),8000);};
@@ -743,7 +746,7 @@ bannerEl.addEventListener('click',()=>{clearTimeout(bannerHideT);clearTimeout(ba
  bannerEl.classList.remove('on');alViaFeed=true;show('8');});
 let swipeY=null;
 bannerEl.addEventListener('touchstart',e=>{swipeY=e.touches[0].clientY;},{passive:true});
-bannerEl.addEventListener('touchmove',e=>{if(swipeY!==null&&swipeY-e.touches[0].clientY>24){swipeY=null;track('feed_banner_swipe',{nth:bannerN});hideBanner('swipe');clearTimeout(bannerT);bannerT=setTimeout(showBanner,30000);}},{passive:true});
+bannerEl.addEventListener('touchmove',e=>{if(swipeY!==null&&swipeY-e.touches[0].clientY>24){swipeY=null;track('feed_banner_swipe',{nth:bannerN});hideBanner('swipe');clearTimeout(bannerT);bannerT=setTimeout(showBanner,ignoredDelay());}},{passive:true});
 const clearBanner=()=>{clearTimeout(bannerT);clearTimeout(bannerHideT);bannerEl.classList.remove('on');};
 const openFeed=()=>{buildFeed();setAlertStage(1);S.alResult=0;save();feedOpenedAt=visNow();show('feed');clearTimeout(bannerT);bannerN=0;
  bannerT=setTimeout(showBanner,S.fast?FAST_DELAY_MS:ALERT_DELAY_MS);};
